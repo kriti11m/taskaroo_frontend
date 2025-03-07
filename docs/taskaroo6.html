@@ -128,7 +128,7 @@
           notes: document.getElementById("notes").value
         };
 
-        fetch(`https://taskaroo-todobackend.onrender.com/addTask?gmail=${encodeURIComponent(storedGmail)}`, {
+        fetch(`https://taskaroo-todobackend-3.onrender.com/addTask?gmail=${encodeURIComponent(storedGmail)}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(task)

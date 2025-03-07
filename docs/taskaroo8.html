@@ -132,7 +132,7 @@
         });
 
         function fetchCompletedTasks(email) {
-            fetch(`https://taskaroo-todobackend.onrender.com/completedTask?email=${encodeURIComponent(email)}`)
+            fetch(`https://taskaroo-todobackend-3.onrender.com/completedTask?email=${encodeURIComponent(email)}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
