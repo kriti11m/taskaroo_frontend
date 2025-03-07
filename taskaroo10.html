@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskaroo - Welcome Back</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0C1533;
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      position: relative; /* For pseudo-element positioning */
+    }
+    /* Centered background image with low opacity */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 800px; /* Adjust as needed */
+      height: 800px;
+      background: url('taskaroo.png') no-repeat center center/contain;
+      opacity: 0.3;
+      transform: translate(-50%, -50%);
+      z-index: -1; /* Keeps the image behind content */
+    }
+    .header {
+      width: 100%;
+      background: #111;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .header .logo {
+      margin-left: 35px;
+    }
+    .logout-button {
+      background-color: red;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 35px;
+    }
+    .welcome-container {
+      background: linear-gradient(135deg, #0F0F3E, #2A48F0);
+      padding: 40px;
+      border-radius: 10px;
+      text-align: center;
+      width: 350px;
+      margin-top: 150px;
+    }
+    .welcome-container h1 {
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+    .welcome-container p {
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+    .map-task-button {
+      background: linear-gradient(135deg, #2A48F0, #6A5ACD);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">TASKAROO 🦘</div>
+    <button class="logout-button" onclick="logout()">Logout</button>
+  </div>
+  <div class="welcome-container">
+    <h1>Welcome Back, Hopper!</h1>
+    <p>Your quirky to-do world awaits—hop right in and tackle your tasks like a pro!</p>
+    <button class="map-task-button" onclick="goToMap()">Map Tasks</button>
+  </div>
+  <script>
+    function logout() {
+      if (confirm("Are you sure you want to logout?")) {
+        alert("You have been successfully logged out.");
+        window.location.href = "taskaroo2.html";
+      }
+    }
+    function goToMap() {
+      window.location.href = "taskaroo5.html";
+    }
+  </script>
+</body>
+</html>

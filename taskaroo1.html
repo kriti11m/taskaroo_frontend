@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskaroo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #0C1533, #1E3C72);
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background-color: #111;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        header h2 {
+            margin: 0;
+        }
+        header nav a {
+            color: white;
+            margin-right: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        header nav a:hover {
+            color: #BADA55;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 50px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .content {
+            width: 50%;
+        }
+        .content h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .content p {
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+        .highlight-box {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #5A3DBD;
+            margin-top: 20px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #BADA55;
+            color: black;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .cta-button:hover {
+            background-color: #A0C944;
+        }
+        .image-container img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .contact_details {
+      text-align: center;
+      padding: 20px;
+      background-color: #111;
+      margin-top: 50px;
+    }
+    .contact_details p {
+      margin: 5px 0;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Taskaroo 🦘</h2>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#contact_details" style="margin-left: 20px;">Contact Us</a>
+            <a href="taskaroo3.html" style="margin-left: 20px;">Login</a>
+            <a href="taskaroo2.html" style="margin-left: 20px;">SignUp</a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="content">
+            <h1>Welcome</h1>
+            <h1> to TASKAROO</h1>
+            <p>Empowering Your Daily Life</p>
+            <div class="highlight-box">
+                <p>Taskaroo is your ultimate productivity sidekick, designed to make managing tasks fun, easy, and efficient. 
+                   With a playful yet powerful interface, Taskaroo helps you stay on top of your to-dos, set reminders, 
+                   track progress, and review completed tasks—all in one place. Say goodbye to procrastination and hello 
+                   to a smarter way to get things done—one hop at a time! 🦘✅🚀
+                </p>
+            </div>
+            <a href="taskaroo3.html" class="cta-button">MAKE YOUR PLANNER TODAY !!</a>
+        </div>
+        <div class="image-container">
+            <img src="taskaroo.png" alt="Taskaroo Illustration">
+        </div>
+    </div>
+    
+    <footer class="contact_details" id="contact_details">
+        <h2>Contact Us</h2>
+        <p>Have any questions or need assistance? Our team is ready to help you get started.</p>
+        <p><strong>📞 Phone:</strong> +123-456-7890</p>
+        <p><strong>📧 E-Mail:</strong> taskaroo@gmail.com</p>
+        <p><strong>🌍 Website:</strong> www.taskaroo.com</p>
+        <p><strong>🏠 Address:</strong> 123 Anywhere St., Any City</p>
+    </footer>
+</body>
+</html>

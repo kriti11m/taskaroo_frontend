@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskaroo - Task Manager</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0c1533;
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+        }
+        /* Centered background image with low opacity */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px; /* Adjust size as needed */
+            height: 800px;
+            background: url('taskaroo.png') no-repeat center center/contain;
+            opacity: 0.3;
+            transform: translate(-50%, -50%);
+            z-index: -1; /* Keeps it behind the content */
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: #111;
+            backdrop-filter: blur(10px);
+        }
+        .header .home-link {
+            font-size: 16px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+        .header .home-link:hover {
+            color: #6b8afd;
+        }
+        .header .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .title {
+            margin-top: 90px;
+            font-size: 50px;
+            font-weight: 900;
+            background-color: #0C1533 ;
+        }
+        .task-container {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+            padding: 100px;
+            flex-grow: 1;
+        }
+        .task-card {
+            background: white;
+            padding: 28px;
+            border-radius: 15px;
+            width: 250px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .task-card h3 {
+            font-size: 18px;
+            color: #0044ff;
+        }
+        .task-card p {
+            font-size: 14px;
+            margin: 15px 0;
+            color: rgb(64, 108, 226);
+        }
+        .task-card .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: auto;
+        }
+        button {
+            background-color: #6b8afd;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #5570d1;
+        }
+        .message {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .footer {
+            background: #111;
+            color: white;
+            padding: 20px 50px;
+            text-align: center;
+            margin-top: auto;
+        }
+        .footer a {
+            color: #6b8afd;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: #5570d1;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="taskaroo1.html" class="home-link">Home</a>
+        <div class="logo">TASKAROO 🦘</div>
+    </div>
+
+    <h1 class="title" style="font-size: 36px; font-weight: 800;">LET’S MAP OUT OUR DAY</h1>
+
+    <section class="task-container">
+        <div class="task-card">
+            <h3>ADD TASK</h3>
+            <p>Create a new task by specifying the time and date. We will send you a reminder to ensure you stay on track.</p>
+            <div class="button-container">
+                <button onclick="location.href='taskaroo6.html'">Add</button>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <h3>Pending Task</h3>
+            <p>Ready to conquer your tasks? Dive in and tackle what's pending with a smile! 😊</p>
+            <div class="button-container">
+                <button onclick="storePendingInfoAndNavigate()">Pending</button>
+            </div>
+        </div>
+
+        <div class="task-card">
+            <h3>Completed Task</h3>
+            <p>Congratulations!🎉<br>
+                You've successfully completed your tasks. Review your achievements and keep up the great work!</p>
+            <div class="button-container">
+                <button onclick="location.href='taskaroo8.html'">Completed</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="footer">
+        <p>&copy; 2023 Taskaroo. All rights reserved.</p>
+        <p>Follow us on 
+            <a href="https://twitter.com" target="_blank">Twitter</a>, 
+            <a href="https://facebook.com" target="_blank">Facebook</a>, and 
+            <a href="https://instagram.com" target="_blank">Instagram</a>.
+        </p>
+    </div>
+
+    <!-- Replace the existing storePendingInfoAndNavigate function -->
+<script>
+    function storePendingInfoAndNavigate() {
+        const email = localStorage.getItem("userGmail");
+        if (!email) {
+            alert("Please login first");
+            window.location.href = "taskaroo3.html";
+            return;
+        }
+        
+        // Navigate directly to pending tasks page
+        window.location.href = "taskaroo7.html";
+    }
+</script>
+</body>
+</html>

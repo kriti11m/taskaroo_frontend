@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskaroo - Change Password</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0C1533;
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      position: relative; /* For the pseudo-element positioning */
+    }
+    /* Centered background image with low opacity */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 800px; /* Adjust as needed */
+      height: 800px;
+      background: url('taskaroo.png') no-repeat center center/contain;
+      opacity: 0.3;
+      transform: translate(-50%, -50%);
+      z-index: -1; /* Keeps it behind your content */
+    }
+    .header {
+      width: 100%;
+      background: #111;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .header a {
+      color: white;
+      text-decoration: none;
+      margin-left: 35px;
+    }
+    .change-container {
+      background: linear-gradient(135deg, #0F0F3E, #2A48F0);
+      padding: 40px;
+      border-radius: 10px;
+      text-align: center;
+      width: 250px;
+      margin-top: 200px;
+    }
+    .change-container h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+      position: relative;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 70%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      cursor: pointer;
+      color: #a76249;
+
+    }
+    .change-button {
+      background-color: blue;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="taskaroo1.html">
+      <i class="fas fa-home"></i>
+    </a>
+    Taskaroo 🦘
+  </div>
+  <div class="change-container">
+    <h1>New Password</h1>
+    <form id="change-password-form">
+      
+      <div class="input-group">
+        <label for="new-password">New Password</label>
+        <input type="password" id="new-password" placeholder="Enter new password" required>
+        <span class="toggle-password" onclick="toggleVisibility('new-password')">👁</span>
+      </div>
+      <div class="input-group">
+        <label for="confirm-password">Confirm New Password</label>
+        <input type="password" id="confirm-password" placeholder="Confirm new password" required>
+        <span class="toggle-password" onclick="toggleVisibility('confirm-password')">👁</span>
+      </div>
+      <button class="change-button" type="submit">Change Password</button>
+    </form>
+  </div>
+
+  <script>
+    // Toggle password visibility for a given input field by its id
+    function toggleVisibility(id) {
+      const field = document.getElementById(id);
+      field.type = (field.type === 'password') ? 'text' : 'password';
+    }
+
+    // Handle the change password form submission
+    document.getElementById('change-password-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const newPass = document.getElementById('new-password').value;
+      const confirmPass = document.getElementById('confirm-password').value;
+      
+      if (newPass !== confirmPass) {
+        alert("New password and confirmation do not match!");
+        return;
+      }
+      
+      // Perform fetch to update password (adjust URL and request as needed)
+      fetch(`https://taskaroo-todobackend.onrender.com/changePassword?current=${encodeURIComponent(current)}&new=${encodeURIComponent(newPass)}`, {
+        method: 'POST'
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert("Password changed successfully!");
+          // Optionally redirect or clear form fields here
+        } else {
+          alert("Password change failed: " + data.message);
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred while changing your password.");
+      });
+    });
+  </script>
+</body>
+</html>

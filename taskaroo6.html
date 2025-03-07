@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taskaroo - Add a Task</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0C1533;
+      color: white;
+      text-align: center;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0A0F2D;
+      padding: 5px 30px;
+    }
+    .navbar .logo {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .map-button {
+      background: linear-gradient(135deg, #2A48F0, #6A5ACD);
+      padding: 10px 20px;
+      border-radius: 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      background: linear-gradient(135deg, #0F0F3E, #2A48F0);
+      padding: 40px;
+      border-radius: 15px;
+    }
+    #priority_level {
+      display: block;
+      width: 100%;
+      padding: 4px;
+      border-radius: 5px;
+      border: none;
+      font-size: 29px;
+      margin-top: 5px;
+    }
+    h1 {
+      font-size: 36px;
+      text-decoration: underline;
+    }
+    label {
+      display: block;
+      text-align: left;
+      font-size: 20px;
+      margin-top: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+      margin-top: 5px;
+    }
+    .save-button {
+      background: linear-gradient(135deg, #A0E3F7, #6A5ACD);
+      color: black;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="taskaroo5.html" class="map-button">Map Page</a>
+    <div class="logo">TASKAROO 🦘</div>
+  </header>
+
+  <div class="container">
+    <h1>Add a Task</h1>
+    <form id="taskForm">
+      <label>Task Description:</label>
+      <input type="text" id="task_desc" required>
+
+      <label>Due Date:</label>
+      <input type="date" id="due_date" required>
+
+      <label>Due Time:</label>
+      <input type="time" id="due_time">
+
+      <label>Priority Level:</label>
+      <select id="priority_level">
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
+
+      <label>Notes or Subtasks:</label>
+      <input type="text" id="notes">
+
+      <button type="submit" class="save-button">SAVE</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const storedGmail = localStorage.getItem("userGmail");
+      if (!storedGmail) {
+        alert("No Gmail found. Please log in.");
+        window.location.href = "taskaroo3.html";
+        return;
+      }
+
+      document.getElementById("taskForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const task = {
+          task_desc: document.getElementById("task_desc").value,
+          due_date: document.getElementById("due_date").value,
+          due_time: document.getElementById("due_time").value,
+          priority_level: document.getElementById("priority_level").value,
+          notes: document.getElementById("notes").value
+        };
+
+        fetch(`https://taskaroo-todobackend.onrender.com/addTask?gmail=${encodeURIComponent(storedGmail)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(task)
+        })
+          .then(response => response.json())
+          .then(data => alert(data.success ? "Task added!" : "Error: " + data.message));
+      });
+    });
+  </script>
+</body>
+</html>

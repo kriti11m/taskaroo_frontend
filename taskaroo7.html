@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ... keep existing head and styles ... -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pending Tasks - Taskaroo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0C1533;
+      color: white;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      position: relative; /* Needed for the pseudo-element positioning */
+    }
+    /* Centered background image with low opacity */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 64%;
+      left: 50%;
+      width: 890px; /* Adjust size as needed */
+      height: 890px;
+      background: url('taskaroo.png') no-repeat center center/contain;
+      opacity: 0.3;
+      transform: translate(-50%, -50%);
+      z-index: -1; /* Ensures the image stays behind your content */
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0A0F2D;
+      padding: 15px 30px;
+    }
+    .navbar .logo {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .map-button {
+      background: linear-gradient(135deg, #2A48F0, #6A5ACD);
+      padding: 10px 20px;
+      border-radius: 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 40px;
+      border-radius: 15px;
+    }
+    h1 {
+      font-size: 36px;
+      text-decoration: underline;
+    }
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    .task {
+      display: flex;
+      align-items: center;
+      background: white;
+      color: black;
+      padding: 15px;
+      width: 80%;
+      border-radius: 10px;
+      font-size: 18px;
+      justify-content: space-between;
+    }
+    .task input {
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 5px;
+      background: #2A48F0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .task input:checked {
+      background: url('https://cdn-icons-png.flaticon.com/512/5610/5610944.png') no-repeat center;
+      background-size: contain;
+    }
+    .task input:checked + label {
+      text-decoration: line-through;
+      color: gray;
+    }
+    .save-button {
+      background: linear-gradient(135deg, #A0E3F7, #6A5ACD);
+      color: black;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .save-button:hover {
+      background: linear-gradient(135deg, #6A5ACD, #A0E3F7);
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="taskaroo5.html" class="map-button">Map Page</a>
+    <div class="logo">TASKAROO 🦘</div>
+  </header>
+
+  <div class="container">
+    <h1>Pending Task</h1>
+    <div class="task-list">
+      <!-- Tasks will be dynamically inserted here -->
+    </div>
+    <button class="save-button" onclick="markTasksComplete()">MARK AS COMPLETE</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const userEmail = localStorage.getItem("userGmail");
+        if (!userEmail) {
+            alert("Please login first");
+            window.location.href = "taskaroo3.html";
+            return;
+        }
+
+        fetchPendingTasks(userEmail);
+    });
+
+    function fetchPendingTasks(email) {
+        fetch(`https://taskaroo-todobackend.onrender.com/pendingTask?email=${encodeURIComponent(email)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(response => {
+                console.log("Pending tasks response:", response);
+                // Check if response has tasks array
+                if (response.success && Array.isArray(response.tasks)) {
+                    displayTasks(response.tasks);
+                } else {
+                    throw new Error('Invalid response format');
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching tasks:", error);
+                document.querySelector('.task-list').innerHTML = 
+                    '<div class="no-tasks">Error loading tasks. Please try again.</div>';
+            });
+    }
+
+    function displayTasks(tasks) {
+    const taskList = document.querySelector('.task-list');
+    taskList.innerHTML = '';
+
+    if (tasks.length === 0) {
+        taskList.innerHTML = '<div class="no-tasks">No pending tasks found</div>';
+        return;
+    }
+
+    tasks.forEach((task, index) => {
+        const taskElement = document.createElement('div');
+        taskElement.className = 'task';
+        taskElement.innerHTML = `
+            <div class="checkbox-wrapper">
+                <input type="checkbox" id="task${index}" data-task-id="${task.task_id}">
+            </div>
+            <div class="task-content">
+                <div>${task.task_desc}</div>
+            </div>
+        `;
+        taskList.appendChild(taskElement);
+    });
+}
+
+function markTasksComplete() {
+    const checkedTasks = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+        .map(checkbox => checkbox.dataset.taskId);
+
+    if (checkedTasks.length === 0) {
+        alert("Please select tasks to mark as complete");
+        return;
+    }
+
+    const userEmail = localStorage.getItem("userGmail");
+    
+    // Send PUT request for each selected task using the correct endpoint
+    Promise.all(checkedTasks.map(taskId => 
+        fetch(`https://taskaroo-todobackend.onrender.com/done?id=${taskId}`, {
+            method: 'PUT'
+        }).then(response => response.json())
+    ))
+    .then(results => {
+        // Check if all tasks were successfully marked as complete
+        if (results.every(result => result.success)) {
+            alert("Tasks marked as complete!");
+            fetchPendingTasks(userEmail); // Refresh the task list
+        } else {
+            alert("Error marking some tasks as complete. Please try again.");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+    });
+}
+</script>
+</body>
+</html>
+

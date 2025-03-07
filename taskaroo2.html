@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Taskaroo - Sign Up</title>
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0c1533;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background-color: #111;
+    }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 24px;
+    }
+    .navbar a i {
+      font-size: 24px;
+    }
+    .left {
+      margin-left: 15px;
+    }
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 50px;
+      max-width: 1200px;
+      margin: auto;
+      gap: 50px;
+    }
+    .image-container img {
+      width: 100%;
+      max-width: 600px;
+    }
+    .signup-form {
+      background: linear-gradient(135deg, #0f0f3e, #2a48f0);
+      padding: 60px;
+      border-radius: 15px;
+      width: 500px;
+      height: 500px;
+      text-align: center;
+    }
+    .signup-form h2 {
+      margin-bottom: 50px;
+    }
+    .signup-form input {
+      width: 100%;
+      padding: 20px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+    }
+    .signup-form button {
+      background-color: white;
+      color: black;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 50px;
+    }
+    .error-message {
+      color: red;
+      margin-bottom: 10px;
+    }
+    footer {
+      background-color: #111;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="taskaroo1.html" class="left"><i class="fas fa-home"></i></a>
+    <h2>Taskaroo 🦘</h2>
+  </header>
+
+  <div class="container">
+    <div class="image-container">
+      <img src="taskaroo.png" alt="Taskaroo Illustration">
+    </div>
+    <div class="signup-form">
+      <h2>CREATE A NEW ACCOUNT</h2>
+      <p id="error-message" class="error-message"></p>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="email" id="email" placeholder="Email Address" />
+      <input type="password" id="password" placeholder="Password" />
+      <button id="signup-btn" onclick="return validateAndSubmit()">SIGN-UP</button>
+      <p style="margin-top: 20px;">
+        Already have an account? 
+        <a href="taskaroo3.html" style="color: white; text-decoration: underline;">Login</a>
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2023 Taskaroo. All rights reserved.
+  </footer>
+
+  <script>
+    function validateAndSubmit() {
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorMessage = document.getElementById("error-message");
+      
+      errorMessage.textContent = "";
+      
+      if (!username || !email || !password) {
+        errorMessage.textContent = "All fields are required.";
+        return false;
+      }
+      
+      // Build URL with query parameters
+      const endpoint = `https://taskaroo-todobackend.onrender.com/signup?name=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+      
+      fetch(endpoint, {
+        method: "POST"
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Store the email in localStorage for later use
+          localStorage.setItem("userGmail", email);
+          alert("Signup successful!");
+          window.location.href = "taskaroo5.html";
+        } else {
+          errorMessage.textContent = data.message || "Signup failed. Please try again.";
+        }
+      })
+      .catch(error => {
+        errorMessage.textContent = "An error occurred. Please try again later.";
+      });
+      
+      return false;
+    }
+  </script>
+</body>
+</html>

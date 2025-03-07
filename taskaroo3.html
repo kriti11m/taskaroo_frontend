@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskaroo - Login</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0C1533;
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      position: relative; /* Needed for the pseudo-element positioning */
+    }
+    /* Centered background image with low opacity */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 800px; /* Adjust size as needed */
+      height: 800px;
+      background: url('taskaroo.png') no-repeat center center/contain;
+      opacity: 0.3;
+      transform: translate(-50%, -50%);
+      z-index: -1; /* Ensures the image stays behind your content */
+    }
+    .header {
+      width: 100%;
+      background: #111;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .login-container {
+      background: linear-gradient(135deg, #0F0F3E, #2A48F0);
+      padding: 40px;
+      border-radius: 10px;
+      text-align: center;
+      width: 220px;
+      height: 300px;
+      margin-top: 200px;
+    }
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+      position: relative;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 70%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      cursor: pointer;
+      color: #a76249;
+    }
+    /* Style for the forgot password link */
+    .forgot-password {
+      display: block;
+      text-align: right;
+      margin-top: 5px;
+      font-size: 12px;
+      color: #a76249;
+      text-decoration: none;
+    }
+    .forgot-password:hover {
+      color: #6b8afd;
+    }
+    .login-button {
+      background-color: blue;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .google-login {
+      margin-top: 20px;
+    }
+    /* Ensure the sign-up text stays on one line */
+    .signup-text {
+      padding-top: 20px;
+      text-align: center;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="taskaroo1.html" style="color: white; text-decoration: none; margin-left: 35px;">
+      <i class="fas fa-home"></i>
+    </a>
+    Taskaroo 🦘
+  </div>
+  <div class="login-container">
+    <h1>Login</h1>
+    <p>Sign in to continue</p>
+    <form id="login-form">
+      <div class="input-group">
+        <label for="email">EMAIL</label>
+        <input type="email" id="email" placeholder="hello@reallygreatsite.com" required>
+      </div>
+      <div class="input-group">
+        <label for="password">PASSWORD</label>
+        <input type="password" id="password" placeholder="******" required>
+        <span class="toggle-password" onclick="togglePasswordVisibility()">👁</span>
+      </div>
+      <!-- Forgot Password link with key icon -->
+      <a href="taskaroo4.html" class="forgot-password">
+        <i class="fas fa-key"></i> Forgot Password?
+      </a>
+      <button class="login-button" type="submit">Login</button>
+    </form>
+    <p style="padding-top: 40px;">or signup with google</p>
+    <div id="g_id_onload" data-client_id="484818255394-7fttjna8nsgk0bs3iflncoi95ruestja.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
+    <div class="google-login">
+      <div class="g_id_signin" data-type="standard"></div>
+    </div>
+    <p class="signup-text">Don't have an account? <a href="taskaroo2.html" style="color: #a76249;">Sign up</a></p>
+  </div>
+
+  <script>
+    function handleCredentialResponse(response) {
+      const idToken = response.credential;
+      fetch("https://taskaroo-todobackend.onrender.com/auth/verifyToken", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", 
+          "idToken": idToken
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.email) {
+          // Store the email in localStorage for later use
+          localStorage.setItem("userGmail", data.email);
+          alert(`Welcome, ${data.name} (${data.email})`);
+          window.location.href = "taskaroo5.html";
+        } else {
+          alert("Login failed!");
+        }
+      })
+      .catch(error => console.error("Login Error:", error));
+    }
+
+    document.getElementById("login-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      let email = document.getElementById("email").value;
+      let password = document.getElementById("password").value;
+      
+      fetch(`https://taskaroo-todobackend.onrender.com/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
+        method: "POST"
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          // Store the email in localStorage for later use
+          localStorage.setItem("userGmail", email);
+          alert("Login successful!");
+          window.location.href = "taskaroo5.html";
+        } else {
+          alert("Invalid credentials.");
+        }
+      })
+      .catch(error => console.error("Login Error:", error));
+    });
+
+    function togglePasswordVisibility() {
+      let passwordField = document.getElementById("password");
+      passwordField.type = passwordField.type === "password" ? "text" : "password";
+    }
+  </script>
+</body>
+</html>

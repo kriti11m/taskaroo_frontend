@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completed Tasks - Taskaroo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0C1533;
+            color: white;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 64%;
+            left: 50%;
+            width: 890px;
+            height: 890px;
+            background: url('taskaroo.png') no-repeat center center/contain;
+            opacity: 0.3;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0A0F2D;
+            padding: 15px 30px;
+        }
+
+        .navbar .logo {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .map-button {
+            background: linear-gradient(135deg, #2A48F0, #6A5ACD);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 40px;
+            border-radius: 15px;
+        }
+
+        h1 {
+            font-size: 36px;
+            text-decoration: underline;
+            margin-bottom: 30px;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .task {
+            display: flex;
+            align-items: center;
+            background: white;
+            color: black;
+            padding: 20px;
+            width: 80%;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .task-content {
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .task-details {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .no-tasks {
+            color: white;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+
+        .success-icon {
+            color: #4CAF50;
+            font-size: 24px;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <a href="taskaroo5.html" class="map-button">Map Page</a>
+        <div class="logo">TASKAROO 🦘</div>
+    </header>
+
+    <div class="container">
+        <h1>Completed Tasks</h1>
+        <div class="task-list">
+            <!-- Tasks will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userEmail = localStorage.getItem("userGmail");
+            if (!userEmail) {
+                alert("Please login first");
+                window.location.href = "taskaroo3.html";
+                return;
+            }
+
+            fetchCompletedTasks(userEmail);
+        });
+
+        function fetchCompletedTasks(email) {
+            fetch(`https://taskaroo-todobackend.onrender.com/completedTask?email=${encodeURIComponent(email)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(tasks => {
+                    console.log("Completed tasks response:", tasks);
+                    displayTasks(tasks);
+                })
+                .catch(error => {
+                    console.error("Error fetching tasks:", error);
+                    document.querySelector('.task-list').innerHTML = 
+                        '<div class="no-tasks">Error loading tasks. Please try again.</div>';
+                });
+        }
+
+        function displayTasks(tasks) {
+            const taskList = document.querySelector('.task-list');
+            taskList.innerHTML = '';
+
+            if (!Array.isArray(tasks) || tasks.length === 0) {
+                taskList.innerHTML = '<div class="no-tasks">No completed tasks found</div>';
+                return;
+            }
+
+            tasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task';
+                taskElement.innerHTML = `
+                    <div class="success-icon">✓</div>
+                    <div class="task-content">
+                        <div>${task.task_desc}</div>
+                        <div class="task-details">
+                            Due: ${formatDate(task.due_date)} ${formatTime(task.due_time)}
+                            ${task.priority_level ? `| Priority: ${task.priority_level}` : ''}
+                            ${task.Notes ? `| Notes: ${task.Notes}` : ''}
+                        </div>
+                    </div>
+                `;
+                taskList.appendChild(taskElement);
+            });
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString();
+        }
+
+        function formatTime(timeString) {
+            if (!timeString) return '';
+            return timeString;
+        }
+    </script>
+</body>
+</html>
