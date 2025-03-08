@@ -136,7 +136,7 @@
     });
 
     function fetchPendingTasks(email) {
-        fetch(`https://taskaroo-todobackend-3.onrender.com/pendingTask?email=${encodeURIComponent(email)}`)
+        fetch(`https://taskaroo-todobackend-1.onrender.com/pendingTask?email=${encodeURIComponent(email)}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -196,7 +196,7 @@ function markTasksComplete() {
     
     // Send PUT request for each selected task using the correct endpoint
     Promise.all(checkedTasks.map(taskId => 
-        fetch(`https://taskaroo-todobackend-3.onrender.com/done?id=${taskId}`, {
+        fetch(`https://taskaroo-todobackend-1.onrender.com/done?id=${taskId}`, {
             method: 'PUT'
         }).then(response => response.json())
     ))

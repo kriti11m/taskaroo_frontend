@@ -141,7 +141,7 @@
   <script>
     function handleCredentialResponse(response) {
       const idToken = response.credential;
-      fetch("https://taskaroo-todobackend-3.onrender.com/auth/verifyToken", {
+      fetch("https://taskaroo-todobackend-1.onrender.com/auth/verifyToken", {
         method: "POST",
         headers: {
           "Content-Type": "application/json", 
@@ -167,7 +167,7 @@
       let email = document.getElementById("email").value;
       let password = document.getElementById("password").value;
       
-      fetch(`https://taskaroo-todobackend-3.onrender.com/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
+      fetch(`https://taskaroo-todobackend-1.onrender.com/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
         method: "POST"
       })
       .then(res => res.json())

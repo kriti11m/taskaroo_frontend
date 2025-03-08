@@ -83,7 +83,6 @@
       font-size: 14px;
       cursor: pointer;
       color: #a76249;
-
     }
     .change-button {
       background-color: blue;
@@ -106,7 +105,6 @@
   <div class="change-container">
     <h1>New Password</h1>
     <form id="change-password-form">
-      
       <div class="input-group">
         <label for="new-password">New Password</label>
         <input type="password" id="new-password" placeholder="Enter new password" required>
@@ -128,9 +126,14 @@
       field.type = (field.type === 'password') ? 'text' : 'password';
     }
 
-    // Handle the change password form submission
-    document.getElementById('change-password-form').addEventListener('submit', function(event) {
-      event.preventDefault();
+    // Function to handle the change password functionality
+    function changePassword() {
+      // Retrieve the email stored from the Forgot Password page
+      const email = localStorage.getItem('taskarooEmail');
+      if (!email) {
+        alert("Email not found. Please use the forgot password process.");
+        return;
+      }
       
       const newPass = document.getElementById('new-password').value;
       const confirmPass = document.getElementById('confirm-password').value;
@@ -140,22 +143,42 @@
         return;
       }
       
-      // Perform fetch to update password (adjust URL and request as needed)
-      fetch(`https://taskaroo-todobackend-3.onrender.com/changePassword?current=${encodeURIComponent(current)}&new=${encodeURIComponent(newPass)}`, {
-        method: 'POST'
+      console.log("Sending reset request with email:", email);
+      
+      // Send email, password, and confirmPassword to backend
+      fetch(`https://taskaroo-todobackend-1.onrender.com/reset?email=${encodeURIComponent(email)}&password=${encodeURIComponent(newPass)}&confirmPassword=${encodeURIComponent(confirmPass)}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
-      .then(response => response.json())
+      .then(response => {
+        console.log("Response received:", response);
+        return response.json();
+      })
       .then(data => {
+        console.log("Data received:", data);
         if (data.success) {
           alert("Password changed successfully!");
-          // Optionally redirect or clear form fields here
+          localStorage.removeItem('taskarooEmail'); // Clear stored email
+          // Redirect to login page after successful password change
+          window.location.href = "taskaroo3.html"; // Changed to redirect to login page
         } else {
-          alert("Password change failed: " + data.message);
+          alert("Password change failed: " + (data.message || "Unknown error"));
         }
       })
       .catch(error => {
         console.error("Error:", error);
         alert("An error occurred while changing your password.");
+      });
+    }
+
+    // Use direct initialization when the DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add event listener directly to avoid any conflicts
+      document.getElementById('change-password-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        changePassword();
       });
     });
   </script>
